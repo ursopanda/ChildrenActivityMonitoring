@@ -1,0 +1,80 @@
+<resources>
+    <string name="app_name">Palm Prosthesis</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_calibrate">Calibration</string>
+    <string name="pref_title_bt_target">Bluetooth target device name</string>
+    <string name="pref_summary_bt_target">Set Bluetooth device</string>
+    <string name="settings">Settings</string>
+    <string name="calibration">Calibration</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="no_bt_support">Device does not support bluetooth</string>
+    <string name="bt_must_be_turned_on">Bluetooth must be turned on to use this applicaion</string>
+    <string name="must_select_bt_device">Bluetooth target device must be set in settings!</string>
+    <string name="must_connect_bt">Connect to bluetooth device first!</string>
+    <string name="processing_on">Stop</string>
+    <string name="processing_off">Start</string>
+    <string name="angle_label">Angle [deg]</string>
+    <string name="calib_progress_lable">Calibration progress:</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_parameters">Settings</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+
+    <string name="pref_title_social_recommendations">Enable social recommendations</string>
+    <string name="pref_description_social_recommendations">Recommendations for people to contact
+        based on your message history
+    </string>
+
+    <string name="pref_title_display_name">Display name</string>
+    <string name="pref_default_display_name">John Smith</string>
+
+    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
+    <string-array name="pref_example_list_titles">
+        <item>Always</item>
+        <item>When possible</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_example_list_values">
+        <item>1</item>
+        <item>0</item>
+        <item>-1</item>
+    </string-array>
+
+    <!-- Example settings for Data & Sync -->
+    <string name="pref_header_data_sync">Data &amp; sync</string>
+
+    <string name="pref_title_sync_frequency">Sync frequency</string>
+    <string-array name="pref_sync_frequency_titles">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>3 hours</item>
+        <item>6 hours</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_sync_frequency_values">
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>180</item>
+        <item>360</item>
+        <item>-1</item>
+    </string-array>
+
+    <string name="pref_title_system_sync_settings">System sync settings</string>
+
+    <!-- Example settings for Notifications -->
+    <string name="pref_header_notifications">Notifications</string>
+
+    <string name="pref_title_new_message_notifications">New message notifications</string>
+
+    <string name="pref_title_ringtone">Ringtone</string>
+    <string name="pref_ringtone_silent">Silent</string>
+
+    <string name="pref_title_vibrate">Vibrate</string>
+</resources>

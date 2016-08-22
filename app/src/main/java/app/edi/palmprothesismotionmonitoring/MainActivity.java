@@ -3,6 +3,7 @@ package app.edi.palmprothesismotionmonitoring;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.bluetooth.BluetoothAdapter;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -71,8 +72,6 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        db.getAllReadings();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         startProcessingButton = (ToggleButton) findViewById(R.id.button_start);
@@ -260,6 +259,13 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
     public void onClickSetActionType(View v) {
         actionTypeEditText = (EditText) findViewById(R.id.actionTypeEditText);
         actionType = actionTypeEditText.getText().toString();
+
+        // Showing Toast notification in order to notify about activity type change
+        Context context = getApplicationContext();
+        CharSequence text = "Activity Set: " + actionType;
+        int duration = Toast.LENGTH_SHORT;
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.show();
     }
 
     // Updatinng timer value

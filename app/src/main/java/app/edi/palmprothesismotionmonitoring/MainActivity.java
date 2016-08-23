@@ -27,6 +27,8 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.TimeUnit;
@@ -68,10 +70,17 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
     // DB instance initialization
     DatabaseHandler db = new DatabaseHandler(this);
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+//        Reading testReading = db.getReading(200);
+//        long yourmilliseconds = testReading.get_timestamp();
+//        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm");
+//        Date resultDate = new Date(yourmilliseconds);
+//        System.out.println(resultDate);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         startProcessingButton = (ToggleButton) findViewById(R.id.button_start);

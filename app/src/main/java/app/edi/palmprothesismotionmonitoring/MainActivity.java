@@ -55,9 +55,13 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
     public static String totalRehabLength;
 
     private EditText actionTypeEditText;
+    private EditText childNameEditText;
+    private Button setChildNameButton;
     private Button setActionTypeButton;
     // here we will store actionType
     public static String actionType;
+    // here we will store child's name
+    public static String childName;
 
     private Vector<Sensor> sensors;
 
@@ -244,7 +248,7 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
                                             System.currentTimeMillis(),
                                             application.processingService.getAcc1X(), application.processingService.getAcc1Y(), application.processingService.getAcc1Z(),
                                                 application.processingService.getAcc2X(), application.processingService.getAcc2Y(), application.processingService.getAcc2Z(),
-                                            MainActivity.actionType));
+                                            MainActivity.actionType, MainActivity.childName));
                                     }
                                 });
                             }
@@ -272,6 +276,18 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
         // Showing Toast notification in order to notify about activity type change
         Context context = getApplicationContext();
         CharSequence text = "Activity Set: " + actionType;
+        int duration = Toast.LENGTH_SHORT;
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.show();
+    }
+
+    public void onClickSetChildName(View v) {
+        childNameEditText = (EditText) findViewById(R.id.chidNameEditText);
+        childName = childNameEditText.getText().toString();
+
+        // Showing Toast notification in order to notify about child's name change
+        Context context = getApplicationContext();
+        CharSequence text = "Child's name set: " + childName;
         int duration = Toast.LENGTH_SHORT;
         Toast toast = Toast.makeText(context, text, duration);
         toast.show();

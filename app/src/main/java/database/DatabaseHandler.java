@@ -27,6 +27,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String ACC2Y = "acc2y";
     private static final String ACC2Z = "acc2z";
     private static final String EVENTTYPE = "eventType";
+    private static final String CHILDNAME = "childName";
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -39,7 +40,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + SESSION_ID + " INTEGER PRIMARY KEY," + TIMESTAMP + " TIMESTAMP,"
                 + ACC1X + " FLOAT," + ACC1Y + " FLOAT," + ACC1Z + " FLOAT,"
                 + ACC2X + " FLOAT," + ACC2Y + " FLOAT," + ACC2Z + " FLOAT,"
-                + EVENTTYPE + " TEXT" + ")";
+                + EVENTTYPE + " TEXT," + CHILDNAME + " TEXT" + ")";
         db.execSQL(CREATE_SESSIONS_TABLE);
     }
 
@@ -68,6 +69,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(ACC2Y, reading.get_acc2y());
         values.put(ACC2Z, reading.get_acc2z());
         values.put(EVENTTYPE, reading.get_eventType());
+        values.put(CHILDNAME, reading.get_childName());
 
         db.insert(TABLE_SESSIONS, null, values);
         db.close();
@@ -78,7 +80,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_SESSIONS, new String[] {SESSION_ID,
-                TIMESTAMP, ACC1X, ACC1Y, ACC1Z, ACC2X, ACC2Y, ACC2Z, EVENTTYPE},
+                TIMESTAMP, ACC1X, ACC1Y, ACC1Z, ACC2X, ACC2Y, ACC2Z, EVENTTYPE, CHILDNAME},
                 SESSION_ID + "=?", new String[] { String.valueOf(id) }, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
@@ -95,6 +97,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         reading.set_acc2z(Float.parseFloat(cursor.getString(7)));
 
         reading.set_eventType(cursor.getString(8));
+        reading.set_childName(cursor.getString(9));
 
         return reading;
     }
@@ -124,6 +127,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 reading.set_acc2z(Float.parseFloat(cursor.getString(7)));
 
                 reading.set_eventType(cursor.getString(8));
+                reading.set_childName(cursor.getString(9));
 
                 // adding reading to the list
                 readingList.add(reading);

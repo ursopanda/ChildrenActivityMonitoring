@@ -16,10 +16,11 @@ public class Reading {
     float _acc2z;
 
     String _eventType;
+    String _childName;
 
     public Reading() {}
 
-    public Reading(int id, long timestamp, float acc1x, float acc1y, float acc1z, float acc2x, float acc2y, float acc2z, String eventType) {
+    public Reading(int id, long timestamp, float acc1x, float acc1y, float acc1z, float acc2x, float acc2y, float acc2z, String eventType, String childName) {
         this._id = id;
         this._timestamp = timestamp;
         this._acc1x = acc1x;
@@ -29,9 +30,10 @@ public class Reading {
         this._acc2y = acc2y;
         this._acc2z = acc2z;
         this._eventType = eventType;
+        this._childName = childName;
     }
 
-    public Reading(long timestamp, float acc1x, float acc1y, float acc1z, float acc2x, float acc2y, float acc2z, String eventType) {
+    public Reading(long timestamp, float acc1x, float acc1y, float acc1z, float acc2x, float acc2y, float acc2z, String eventType, String childName) {
         this._timestamp = timestamp;
         this._acc1x = acc1x;
         this._acc1y = acc1y;
@@ -40,6 +42,7 @@ public class Reading {
         this._acc2y = acc2y;
         this._acc2z = acc2z;
         this._eventType = eventType;
+        this._childName = childName;
     }
 
     public int get_id() {
@@ -112,5 +115,13 @@ public class Reading {
 
     public void set_eventType(String _eventType) {
         this._eventType = _eventType;
+    }
+
+    public String get_childName() {
+        return _childName;
+    }
+
+    public void set_childName(String _childName) {
+        this._childName = _childName;
     }
 }

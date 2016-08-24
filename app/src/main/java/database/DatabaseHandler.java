@@ -16,8 +16,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "monitoringSession";
-    private static final String TABLE_SESSIONS = "sessions";
 
+    // Fields for table children
+    private static final String TABLE_CHILD = "children";
+    private static final String TABLE_CHILD_ID = "personID";
+    private static final String NAME = "name";
+    private static final String SURNAME = "surname";
+    private static final String SEX = "sex";
+    private static final String AGE = "age";
+
+    // Fields for table sessions
+    private static final String TABLE_SESSIONS = "sessions";
     private static final String SESSION_ID = "id";
     private static final String TIMESTAMP = "timestamp";
     private static final String ACC1X = "acc1x";
@@ -27,7 +36,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String ACC2Y = "acc2y";
     private static final String ACC2Z = "acc2z";
     private static final String EVENTTYPE = "eventType";
-    private static final String CHILDNAME = "childName";
+    private static final String CHILDID = "childID";
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -36,11 +45,27 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // creating tables
     @Override
     public void onCreate(SQLiteDatabase db) {
+        String CREATE_CHILD_TABLE = "CREATE TABLE " + TABLE_CHILD + "("
+                + TABLE_CHILD_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + NAME + " TEXT,"
+                + SURNAME + " TEXT,"
+                + SEX + " TEXT,"
+                + AGE + " INTEGER" + ")";
+
         String CREATE_SESSIONS_TABLE = "CREATE TABLE " + TABLE_SESSIONS + "("
-                + SESSION_ID + " INTEGER PRIMARY KEY," + TIMESTAMP + " TIMESTAMP,"
-                + ACC1X + " FLOAT," + ACC1Y + " FLOAT," + ACC1Z + " FLOAT,"
-                + ACC2X + " FLOAT," + ACC2Y + " FLOAT," + ACC2Z + " FLOAT,"
-                + EVENTTYPE + " TEXT," + CHILDNAME + " TEXT" + ")";
+                + SESSION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + TIMESTAMP + " TIMESTAMP,"
+                + ACC1X + " FLOAT,"
+                + ACC1Y + " FLOAT,"
+                + ACC1Z + " FLOAT,"
+                + ACC2X + " FLOAT,"
+                + ACC2Y + " FLOAT,"
+                + ACC2Z + " FLOAT,"
+                + EVENTTYPE + " TEXT,"
+                + CHILDID + " INTEGER,"
+                + " FOREIGN KEY ("+CHILDID+") REFERENCES "+TABLE_CHILD+"("+TABLE_CHILD_ID+"));";
+
+        db.execSQL(CREATE_CHILD_TABLE);
         db.execSQL(CREATE_SESSIONS_TABLE);
     }
 
@@ -55,7 +80,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     // implementation of CRUD operations
-
     // adding new reading
     public void addReading(Reading reading) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -69,7 +93,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(ACC2Y, reading.get_acc2y());
         values.put(ACC2Z, reading.get_acc2z());
         values.put(EVENTTYPE, reading.get_eventType());
-        values.put(CHILDNAME, reading.get_childName());
+        values.put(CHILDID, reading.get_childID());
 
         db.insert(TABLE_SESSIONS, null, values);
         db.close();
@@ -80,7 +104,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_SESSIONS, new String[] {SESSION_ID,
-                TIMESTAMP, ACC1X, ACC1Y, ACC1Z, ACC2X, ACC2Y, ACC2Z, EVENTTYPE, CHILDNAME},
+                TIMESTAMP, ACC1X, ACC1Y, ACC1Z, ACC2X, ACC2Y, ACC2Z, EVENTTYPE, CHILDID},
                 SESSION_ID + "=?", new String[] { String.valueOf(id) }, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
@@ -97,7 +121,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         reading.set_acc2z(Float.parseFloat(cursor.getString(7)));
 
         reading.set_eventType(cursor.getString(8));
-        reading.set_childName(cursor.getString(9));
+        reading.set_childID(Integer.parseInt(cursor.getString(9)));
 
         return reading;
     }
@@ -127,7 +151,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 reading.set_acc2z(Float.parseFloat(cursor.getString(7)));
 
                 reading.set_eventType(cursor.getString(8));
-                reading.set_childName(cursor.getString(9));
+                reading.set_childID(Integer.parseInt(cursor.getString(9)));
 
                 // adding reading to the list
                 readingList.add(reading);

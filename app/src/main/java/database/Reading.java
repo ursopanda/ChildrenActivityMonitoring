@@ -16,11 +16,13 @@ public class Reading {
     float _acc2z;
 
     String _eventType;
-    String _childName;
+
+    // Variable for storing the FK to table Children
+    int _childID;
 
     public Reading() {}
 
-    public Reading(int id, long timestamp, float acc1x, float acc1y, float acc1z, float acc2x, float acc2y, float acc2z, String eventType, String childName) {
+    public Reading(int id, long timestamp, float acc1x, float acc1y, float acc1z, float acc2x, float acc2y, float acc2z, String eventType, int childID) {
         this._id = id;
         this._timestamp = timestamp;
         this._acc1x = acc1x;
@@ -30,10 +32,10 @@ public class Reading {
         this._acc2y = acc2y;
         this._acc2z = acc2z;
         this._eventType = eventType;
-        this._childName = childName;
+        this._childID = childID;
     }
 
-    public Reading(long timestamp, float acc1x, float acc1y, float acc1z, float acc2x, float acc2y, float acc2z, String eventType, String childName) {
+    public Reading(long timestamp, float acc1x, float acc1y, float acc1z, float acc2x, float acc2y, float acc2z, String eventType, int childID) {
         this._timestamp = timestamp;
         this._acc1x = acc1x;
         this._acc1y = acc1y;
@@ -42,7 +44,7 @@ public class Reading {
         this._acc2y = acc2y;
         this._acc2z = acc2z;
         this._eventType = eventType;
-        this._childName = childName;
+        this._childID = childID;
     }
 
     public int get_id() {
@@ -117,11 +119,11 @@ public class Reading {
         this._eventType = _eventType;
     }
 
-    public String get_childName() {
-        return _childName;
+    public int get_childID() {
+        return _childID;
     }
 
-    public void set_childName(String _childName) {
-        this._childName = _childName;
+    public void set_childID(int _childID) {
+        this._childID = _childID;
     }
 }

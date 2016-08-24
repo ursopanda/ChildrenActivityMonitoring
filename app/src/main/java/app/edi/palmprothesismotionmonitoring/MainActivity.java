@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
     private GoogleApiClient client;
 
     // DB instance initialization
-    DatabaseHandler db = new DatabaseHandler(this);
+  DatabaseHandler db = new DatabaseHandler(this);
 
 
     @Override
@@ -244,11 +244,12 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
+//                                      // TO-DO: CHANGE '1' to actual ChildID
                                         db.addReading(new Reading(
                                             System.currentTimeMillis(),
                                             application.processingService.getAcc1X(), application.processingService.getAcc1Y(), application.processingService.getAcc1Z(),
                                                 application.processingService.getAcc2X(), application.processingService.getAcc2Y(), application.processingService.getAcc2Z(),
-                                            MainActivity.actionType, MainActivity.childName));
+                                            MainActivity.actionType, 1));
                                     }
                                 });
                             }

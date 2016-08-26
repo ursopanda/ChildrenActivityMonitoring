@@ -36,7 +36,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String ACC2Y = "acc2y";
     private static final String ACC2Z = "acc2z";
     private static final String EVENTTYPE = "eventType";
-    private static final String CHILDID = "childID";
+    private static final String CHILDIDFK = "childID";
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -62,8 +62,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + ACC2Y + " FLOAT,"
                 + ACC2Z + " FLOAT,"
                 + EVENTTYPE + " TEXT,"
-                + CHILDID + " INTEGER,"
-                + " FOREIGN KEY ("+CHILDID+") REFERENCES "+TABLE_CHILD+"("+TABLE_CHILD_ID+"));";
+                + CHILDIDFK + " INTEGER,"
+                + " FOREIGN KEY ("+CHILDIDFK+") REFERENCES "+TABLE_CHILD+"("+TABLE_CHILD_ID+"));";
 
         db.execSQL(CREATE_CHILD_TABLE);
         db.execSQL(CREATE_SESSIONS_TABLE);
@@ -79,7 +79,75 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    // implementation of CRUD operations
+    // implementation of CRUD operations for Child table
+    // adding new child
+    public void addChild(Child child) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(TABLE_CHILD_ID, child.get_id());
+        values.put(NAME, child.get_name());
+        values.put(SURNAME, child.get_surname());
+        values.put(AGE, child.get_age());
+        values.put(SEX, child.get_sex());
+
+        db.insert(TABLE_CHILD, null, values);
+        db.close();
+    }
+
+    // getting single Child
+    public Child getChild(int id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(TABLE_CHILD, new String[] {TABLE_CHILD_ID, NAME, SURNAME, SEX, AGE},
+                TABLE_CHILD_ID + "=?", new String[] { String.valueOf(id) }, null, null, null, null);
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        Child child = new Child();
+        child.set_id(Integer.parseInt(cursor.getString(0)));
+        child.set_name(cursor.getString(1));
+        child.set_surname(cursor.getString(2));
+        child.set_sex(cursor.getString(3));
+        child.set_age(Integer.parseInt(cursor.getString(4)));
+
+        return child;
+    }
+
+    public List<Child> getAllChildren() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        List<Child> childList = new ArrayList<>();
+        // select all query
+        String selectQuery = "SELECT * FROM " + TABLE_CHILD;
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to created arrayList
+        if (cursor.moveToFirst()) {
+            do {
+                Child child = new Child();
+
+                child.set_id(Integer.parseInt(cursor.getString(0)));
+                child.set_name(cursor.getString(1));
+                child.set_surname(cursor.getString(2));
+                child.set_sex(cursor.getString(3));
+                child.set_age(Integer.parseInt(cursor.getString(4)));
+
+                // adding child to the list
+                childList.add(child);
+            } while (cursor.moveToNext());
+        }
+        return childList;
+    }
+
+    // delete single child from DB
+    public void deleteChild(Child child) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_CHILD, TABLE_CHILD_ID + " = ?",
+                new String[] { String.valueOf(child.get_id()) });
+        db.close();
+    }
+
+    // implementation of CRUD operations for Reading table
     // adding new reading
     public void addReading(Reading reading) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -93,7 +161,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(ACC2Y, reading.get_acc2y());
         values.put(ACC2Z, reading.get_acc2z());
         values.put(EVENTTYPE, reading.get_eventType());
-        values.put(CHILDID, reading.get_childID());
+        values.put(CHILDIDFK, reading.get_childID());
 
         db.insert(TABLE_SESSIONS, null, values);
         db.close();
@@ -103,8 +171,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public Reading getReading(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(TABLE_SESSIONS, new String[] {SESSION_ID,
-                TIMESTAMP, ACC1X, ACC1Y, ACC1Z, ACC2X, ACC2Y, ACC2Z, EVENTTYPE, CHILDID},
+        Cursor cursor = db.query(TABLE_SESSIONS, new String[]
+                {SESSION_ID, TIMESTAMP, ACC1X, ACC1Y, ACC1Z, ACC2X, ACC2Y, ACC2Z, EVENTTYPE, CHILDIDFK},
                 SESSION_ID + "=?", new String[] { String.valueOf(id) }, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
@@ -172,6 +240,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_SESSIONS, SESSION_ID + " = ?",
                 new String[] { String.valueOf(reading.get_id()) });
+        db.close();
+    }
+
+    public void deleteDataFromDB() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_CHILD, null, null);
+        db.delete(TABLE_SESSIONS, null, null);
         db.close();
     }
 }

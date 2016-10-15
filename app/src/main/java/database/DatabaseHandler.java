@@ -61,9 +61,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + ACC2X + " FLOAT,"
                 + ACC2Y + " FLOAT,"
                 + ACC2Z + " FLOAT,"
-                + EVENTTYPE + " TEXT,"
-                + CHILDIDFK + " INTEGER,"
-                + " FOREIGN KEY ("+CHILDIDFK+") REFERENCES "+TABLE_CHILD+"("+TABLE_CHILD_ID+"));";
+                + EVENTTYPE + " TEXT" + ")";
+//                + CHILDIDFK + " INTEGER,"
+//                + " FOREIGN KEY ("+CHILDIDFK+") REFERENCES "+TABLE_CHILD+"("+TABLE_CHILD_ID+"));";
 
         db.execSQL(CREATE_CHILD_TABLE);
         db.execSQL(CREATE_SESSIONS_TABLE);
@@ -161,9 +161,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(ACC2Y, reading.get_acc2y());
         values.put(ACC2Z, reading.get_acc2z());
         values.put(EVENTTYPE, reading.get_eventType());
-        values.put(CHILDIDFK, reading.get_childID());
+//        values.put(CHILDIDFK, reading.get_childID());
 
         db.insert(TABLE_SESSIONS, null, values);
+        String selectQuery = "SELECT * FROM " + TABLE_SESSIONS;
+        db.rawQuery(selectQuery, null);
         db.close();
     }
 
@@ -172,7 +174,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_SESSIONS, new String[]
-                {SESSION_ID, TIMESTAMP, ACC1X, ACC1Y, ACC1Z, ACC2X, ACC2Y, ACC2Z, EVENTTYPE, CHILDIDFK},
+                {SESSION_ID, TIMESTAMP, ACC1X, ACC1Y, ACC1Z, ACC2X, ACC2Y, ACC2Z, EVENTTYPE},
+//                        , CHILDIDFK},
                 SESSION_ID + "=?", new String[] { String.valueOf(id) }, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
@@ -189,7 +192,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         reading.set_acc2z(Float.parseFloat(cursor.getString(7)));
 
         reading.set_eventType(cursor.getString(8));
-        reading.set_childID(Integer.parseInt(cursor.getString(9)));
+//        reading.set_childID(Integer.parseInt(cursor.getString(9)));
 
         return reading;
     }
@@ -219,7 +222,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 reading.set_acc2z(Float.parseFloat(cursor.getString(7)));
 
                 reading.set_eventType(cursor.getString(8));
-                reading.set_childID(Integer.parseInt(cursor.getString(9)));
+//                reading.set_childID(Integer.parseInt(cursor.getString(9)));
 
                 // adding reading to the list
                 readingList.add(reading);
@@ -245,7 +248,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public void deleteDataFromDB() {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_CHILD, null, null);
+//        db.delete(TABLE_CHILD, null, null);
         db.delete(TABLE_SESSIONS, null, null);
         db.close();
     }

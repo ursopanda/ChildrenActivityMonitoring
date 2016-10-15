@@ -56,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
 
     private EditText actionTypeEditText;
     private EditText childNameEditText;
+    private TextView firstAccAVGValue;
+    private TextView secondAccAVGValue;
     private Button setChildNameButton;
     private Button setActionTypeButton;
     // here we will store actionType
@@ -80,11 +82,16 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        db.deleteDataFromDB();
+
 //        Reading testReading = db.getReading(200);
 //        long yourmilliseconds = testReading.get_timestamp();
 //        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm");
 //        Date resultDate = new Date(yourmilliseconds);
 //        System.out.println(resultDate);
+
+//        TextView firstAccAVGValue = (TextView) findViewById(R.id.firstAccAVGTextView);
+//        TextView secondAccAVGValue = (TextView) findViewById(R.id.secondAccAVGTextView);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         startProcessingButton = (ToggleButton) findViewById(R.id.button_start);
@@ -240,7 +247,7 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
                     public void run() {
                         try {
                             while (!isInterrupted()) {
-                                Thread.sleep(20);
+                                Thread.sleep(1000);
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -249,7 +256,12 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
                                             System.currentTimeMillis(),
                                             application.processingService.getAcc1X(), application.processingService.getAcc1Y(), application.processingService.getAcc1Z(),
                                                 application.processingService.getAcc2X(), application.processingService.getAcc2Y(), application.processingService.getAcc2Z(),
-                                            MainActivity.actionType, 1));
+                                            MainActivity.actionType ));
+
+//                                        firstAccAVGValue.setText(String.valueOf((application.processingService.getAcc1X()+application.processingService.getAcc1Y()
+//                                                +application.processingService.getAcc1Z())/3));
+//                                        secondAccAVGValue.setText(String.valueOf((application.processingService.getAcc2X()+application.processingService.getAcc2Y()
+//                                                +application.processingService.getAcc2Z())/3));
                                     }
                                 });
                             }
@@ -269,6 +281,15 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
         }
 
     }
+
+    public void onClickShowTheGraph(View v) {
+        db.getAllReadings();
+        if (!startProcessingButton.isChecked()) {
+            Intent intent = new Intent(this, GraphActivity.class);
+            startActivity(intent);
+        } else
+            Toast.makeText(this, getString(R.string.must_stop_processing), Toast.LENGTH_SHORT).show();
+        }
 
     public void onClickSetActionType(View v) {
         actionTypeEditText = (EditText) findViewById(R.id.actionTypeEditText);

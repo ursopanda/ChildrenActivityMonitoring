@@ -45,6 +45,13 @@
             android:value="@integer/google_play_services_version" />
 
         <activity android:name=".GraphActivity" />
+        <activity android:name=".AddChildrenDataActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".ChildrenDataActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

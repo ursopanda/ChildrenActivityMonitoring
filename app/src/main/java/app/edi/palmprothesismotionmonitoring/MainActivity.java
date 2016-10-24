@@ -1,11 +1,8 @@
 package app.edi.palmprothesismotionmonitoring;
 
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -17,7 +14,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -27,13 +23,10 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 
-import database.DatabaseHandler;
+import database.DatabaseHandler_OLD;
 import database.Reading;
 import lv.edi.BluetoothLib.BluetoothService;
 import lv.edi.SmartWearProcessing.Sensor;
@@ -74,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
     private GoogleApiClient client;
 
     // DB instance initialization
-  DatabaseHandler db = new DatabaseHandler(this);
+  DatabaseHandler_OLD db = new DatabaseHandler_OLD(this);
 
 
     @Override

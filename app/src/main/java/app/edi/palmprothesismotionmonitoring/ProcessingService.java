@@ -1,16 +1,12 @@
 package app.edi.palmprothesismotionmonitoring;
 
 import android.content.Context;
-import android.provider.ContactsContract;
 import android.util.Log;
-import android.view.View;
 
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
-import database.DatabaseHandler;
-import database.Reading;
 import lv.edi.SmartWearProcessing.Filter;
 import lv.edi.SmartWearProcessing.Sensor;
 import lv.edi.SmartWearProcessing.SensorDataProcessing;

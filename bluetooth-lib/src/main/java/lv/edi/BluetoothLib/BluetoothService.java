@@ -126,7 +126,7 @@ public class BluetoothService {
     }
 
     /**
-     * Functions disconnecte remote bluetooth device
+     * Functions disconnect remote bluetooth device
      */
     public void disconnectDevice(){
         connectThread.cancel();

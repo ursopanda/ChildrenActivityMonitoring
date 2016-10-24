@@ -16,9 +16,8 @@ import android.graphics.Typeface;
 import android.widget.LinearLayout;
 
 import java.util.List;
-import java.util.Random;
 
-import database.DatabaseHandler;
+import database.DatabaseHandler_OLD;
 import database.Reading;
 
 
@@ -27,7 +26,7 @@ public class GraphActivity extends Activity {
     public double readingAVGValue = 0d;
 
     // Getting a refference to a DB to get Flexion's values to the table
-    final DatabaseHandler db = new DatabaseHandler(this);
+    final DatabaseHandler_OLD db = new DatabaseHandler_OLD(this);
 
     private View mChart;
 

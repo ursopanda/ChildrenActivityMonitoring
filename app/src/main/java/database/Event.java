@@ -87,7 +87,7 @@ public class Event {
         this._battery_status = _battery_status;
     }
 
-    public boolean is_isProcessingRunning() {
+    public boolean get_isProcessingRunning() {
         return _isProcessingRunning;
     }
 
@@ -95,7 +95,7 @@ public class Event {
         this._isProcessingRunning = _isProcessingRunning;
     }
 
-    public boolean is_isDataOK() {
+    public boolean get_isDataOK() {
         return _isDataOK;
     }
 

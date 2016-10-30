@@ -1,6 +1,8 @@
 package database;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /**
@@ -53,4 +55,98 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+    // creating tables
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        String CREATE_DATA_TABLE = "CREATE TABLE " + TABLE_DATA + "("
+                + DATA_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + DATA_TIMESTAMP + " TIMESTAMP,"
+                + ACC1X + " FLOAT,"
+                + ACC1Y + " FLOAT,"
+                + ACC1Z + " FLOAT,"
+                + ACC2X + " FLOAT,"
+                + ACC2Y + " FLOAT,"
+                + ACC2Z + " FLOAT,"
+                + SMART_DEVICE_ID + " TEXT" + ")";
+
+        String CREATE_EVENT_TABLE = "CREATE TABLE " + TABLE_EVENT + "("
+                + EVENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + EVENT_TIMESTAMP + " TIMESTAMP,"
+                + ACTION + " TEXT,"
+                + CHILD_ID + " TEXT,"
+                + BT_STATUS + " TEXT,"
+                + BATTERY_STATUS + " TEXT,"
+                + IS_PROCESSING_RUNNING + " BOOLEAN,"
+                + IS_DATA_OK + " BOOLEAN" + ")";
+
+        String CREATE_DEVICE_TABLE = "CREATE TABLE " + TABLE_DEVICE + "("
+                + DEVICE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + MAC_ADDR_DEVICE + " TEXT,"
+                + MAC_ADDR_PHONE + " TEXT" + ")";
+
+        db.execSQL(CREATE_DATA_TABLE);
+        db.execSQL(CREATE_DEVICE_TABLE);
+        db.execSQL(CREATE_EVENT_TABLE);
+    }
+
+    // upgrading DB
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        // drop older DB version
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_DATA);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_EVENT);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_DEVICE);
+
+        // create table again
+        onCreate(db);
+    }
+
+    // CRUD operations for Data Table
+    public void addData(Data data) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(DATA_ID, data.get_id());
+        values.put(DATA_TIMESTAMP, data.get_timestamp());
+
+        values.put(ACC1X, data.get_acc1x());
+        values.put(ACC1Y, data.get_acc1y());
+        values.put(ACC1Z, data.get_acc1z());
+        values.put(ACC2X, data.get_acc2x());
+        values.put(ACC2Y, data.get_acc2y());
+        values.put(ACC2Z, data.get_acc2z());
+
+        values.put(MAGN1X, data.get_magn1x());
+        values.put(MAGN1Y, data.get_magn1y());
+        values.put(MAGN1Z, data.get_magn1z());
+        values.put(MAGN2X, data.get_magn2x());
+        values.put(MAGN2Y, data.get_magn2y());
+        values.put(MAGN2Z, data.get_magn2z());
+
+        values.put(DEVICE_ID, data.get_smart_device_ID());
+    }
+
+    // CRUD operations for Event Table
+    public void addEvent(Event event) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(EVENT_ID, event.get_id());
+        values.put(EVENT_TIMESTAMP, event.get_timestamp());
+        values.put(ACTION, event.get_action());
+        values.put(CHILD_ID, event.get_child_ID());
+        values.put(BT_STATUS, event.get_BT_status());
+        values.put(BATTERY_STATUS, event.get_battery_status());
+        values.put(IS_PROCESSING_RUNNING, event.get_isProcessingRunning());
+        values.put(IS_DATA_OK, event._isDataOK);
+    }
+
+    // CRUD operations for Device Table
+    public void addDevice(Device device) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(DEVICE_ID, device.get_id());
+        values.put(MAC_ADDR_DEVICE, device.get_MAC_ADDR_DEVICE());
+        values.put(MAC_ADDR_PHONE, device.get_MAC_ADDR_PHONE());
+    }
 }

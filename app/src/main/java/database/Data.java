@@ -195,3 +195,4 @@ public class Data {
         this._smart_device_ID = _smart_device_ID;
     }
 }
+

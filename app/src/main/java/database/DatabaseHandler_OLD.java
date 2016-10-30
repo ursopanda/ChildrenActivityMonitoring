@@ -79,6 +79,7 @@ public class DatabaseHandler_OLD extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+
     // implementation of CRUD operations for Child table
     // adding new child
     public void addChild(Child child) {

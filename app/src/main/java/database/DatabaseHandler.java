@@ -2,8 +2,12 @@ package database;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Emil on 24/10/2016.
@@ -125,6 +129,40 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(DEVICE_ID, data.get_smart_device_ID());
     }
 
+    public List<Data> getAllData() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        List<Data> dataList = new ArrayList<>();
+
+        // select all query
+        String selectQuery = "SELECT * FROM " + TABLE_DATA;
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to created arrayList
+        if (cursor.moveToFirst()) {
+            do {
+                Data data = new Data();
+
+                data.set_id(Integer.parseInt(cursor.getString(0)));
+                data.set_timestamp(Long.parseLong(cursor.getString(1)));
+
+                data.set_acc1x(Float.parseFloat(cursor.getString(2)));
+                data.set_acc1y((Float.parseFloat(cursor.getString(3))));
+                data.set_acc1z((Float.parseFloat(cursor.getString(4))));
+                data.set_acc2x((Float.parseFloat(cursor.getString(5))));
+                data.set_acc2y((Float.parseFloat(cursor.getString(6))));
+                data.set_acc2z((Float.parseFloat(cursor.getString(7))));
+
+                data.set_magn1x((Float.parseFloat(cursor.getString(8))));
+                data.set_magn1y((Float.parseFloat(cursor.getString(9))));
+                data.set_magn1z((Float.parseFloat(cursor.getString(10))));
+                data.set_magn2x((Float.parseFloat(cursor.getString(11))));
+                data.set_magn2z((Float.parseFloat(cursor.getString(12))));
+                data.set_smart_device_ID(cursor.getString(13));
+            } while (cursor.moveToNext());
+        }
+        return dataList;
+    }
+
     // CRUD operations for Event Table
     public void addEvent(Event event) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -140,6 +178,32 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(IS_DATA_OK, event._isDataOK);
     }
 
+    public List<Event> getAllEvents() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        List<Event> eventList = new ArrayList<>();
+
+        // select all query
+        String selectQuery = "SELECT * FROM " + TABLE_EVENT;
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to created arrayList
+        if (cursor.moveToFirst()) {
+            do {
+                Event event = new Event();
+
+                event.set_id(Integer.parseInt(cursor.getString(0)));
+                event.set_timestamp(Long.parseLong(cursor.getString(1)));
+                event.set_action(cursor.getString(2));
+                event.set_child_ID(cursor.getString(3));
+                event.set_BT_status(cursor.getString(4));
+                event.set_battery_status(cursor.getString(5));
+                event.set_isProcessingRunning(Boolean.parseBoolean(cursor.getString(6)));
+                event.set_isDataOK(Boolean.parseBoolean(cursor.getString(7)));
+            } while (cursor.moveToNext());
+        }
+        return eventList;
+    }
+
     // CRUD operations for Device Table
     public void addDevice(Device device) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -149,4 +213,27 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(MAC_ADDR_DEVICE, device.get_MAC_ADDR_DEVICE());
         values.put(MAC_ADDR_PHONE, device.get_MAC_ADDR_PHONE());
     }
+
+    public List<Device> getAllDevices() {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        List<Device> deviceList = new ArrayList<>();
+
+        // select all query
+        String selectQuery = "SELECT * FROM " + TABLE_DEVICE;
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to created arrayList
+        if (cursor.moveToFirst()) {
+            do {
+                Device device = new Device();
+
+                device.set_id(Integer.parseInt(cursor.getString(0)));
+                device.set_MAC_ADDR_DEVICE(cursor.getString(1));
+                device.set_MAC_ADDR_PHONE(cursor.getString(2));
+            } while (cursor.moveToNext());
+        }
+        return deviceList;
+    }
+
 }

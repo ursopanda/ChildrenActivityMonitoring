@@ -12,9 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 import android.os.Handler;
@@ -49,10 +47,7 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
 
     private EditText actionTypeEditText;
     private EditText childNameEditText;
-    private TextView firstAccAVGValue;
-    private TextView secondAccAVGValue;
-    private Button setChildNameButton;
-    private Button setActionTypeButton;
+
     // here we will store actionType
     public static String actionType;
     // here we will store child's name
@@ -74,17 +69,6 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        db.deleteDataFromDB();
-
-//        Reading testReading = db.getReading(200);
-//        long yourmilliseconds = testReading.get_timestamp();
-//        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd,yyyy HH:mm");
-//        Date resultDate = new Date(yourmilliseconds);
-//        System.out.println(resultDate);
-
-//        TextView firstAccAVGValue = (TextView) findViewById(R.id.firstAccAVGTextView);
-//        TextView secondAccAVGValue = (TextView) findViewById(R.id.secondAccAVGTextView);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         startProcessingButton = (ToggleButton) findViewById(R.id.button_start);
@@ -250,11 +234,6 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
                                             application.processingService.getAcc1X(), application.processingService.getAcc1Y(), application.processingService.getAcc1Z(),
                                                 application.processingService.getAcc2X(), application.processingService.getAcc2Y(), application.processingService.getAcc2Z(),
                                             MainActivity.actionType ));
-
-//                                        firstAccAVGValue.setText(String.valueOf((application.processingService.getAcc1X()+application.processingService.getAcc1Y()
-//                                                +application.processingService.getAcc1Z())/3));
-//                                        secondAccAVGValue.setText(String.valueOf((application.processingService.getAcc2X()+application.processingService.getAcc2Y()
-//                                                +application.processingService.getAcc2Z())/3));
                                     }
                                 });
                             }

@@ -24,7 +24,8 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 
-import database.DatabaseHandler_OLD;
+import database.Data;
+import database.DatabaseHandler;
 import database.Reading;
 import lv.edi.BluetoothLib.BluetoothService;
 import lv.edi.SmartWearProcessing.Sensor;
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
     private GoogleApiClient client;
 
     // DB instance initialization
-  DatabaseHandler_OLD db = new DatabaseHandler_OLD(this);
+  DatabaseHandler db = new DatabaseHandler(this);
 
 
     @Override
@@ -224,16 +225,16 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
                     public void run() {
                         try {
                             while (!isInterrupted()) {
-                                Thread.sleep(1000);
+                                Thread.sleep(500);
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-//                                      // TO-DO: CHANGE '1' to actual ChildID
-                                        db.addReading(new Reading(
-                                            System.currentTimeMillis(),
-                                            application.processingService.getAcc1X(), application.processingService.getAcc1Y(), application.processingService.getAcc1Z(),
+                                        db.addData(new Data(System.currentTimeMillis(),
+                                                application.processingService.getAcc1X(), application.processingService.getAcc1Y(), application.processingService.getAcc1Z(),
                                                 application.processingService.getAcc2X(), application.processingService.getAcc2Y(), application.processingService.getAcc2Z(),
-                                            MainActivity.actionType ));
+                                                application.processingService.getMagn1X(), application.processingService.getMagn1Y(), application.processingService.getMagn1Z(),
+                                                application.processingService.getMagn2X(), application.processingService.getMagn2Y(), application.processingService.getMagn2Z(),
+                                                "DEVICE ID"));
                                     }
                                 });
                             }
@@ -251,11 +252,9 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
             sessionTimer = SystemClock.uptimeMillis();
             //handler.postDelayed(updateTimer, 0); CURRENTLY produces EXCEPTION. RUNNABLE DOESN'T get valu of sessionTime view
         }
-
     }
 
     public void onClickShowTheGraph(View v) {
-        db.getAllReadings();
         if (!startProcessingButton.isChecked()) {
             Intent intent = new Intent(this, GraphActivity.class);
             startActivity(intent);

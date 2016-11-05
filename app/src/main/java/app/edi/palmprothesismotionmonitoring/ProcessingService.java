@@ -236,9 +236,9 @@ public class ProcessingService {
         return (int)getSessionLength()/getMovementCount();
     }
 
-    public float getAcc1X() {
-        return sensors.get(0).getAccNormX();
-    }
+    // Getters for Accelerometers
+
+    public float getAcc1X() { return sensors.get(0).getAccNormX(); }
 
     public float getAcc1Y() {
         return sensors.get(0).getAccNormY();
@@ -259,6 +259,21 @@ public class ProcessingService {
     public float getAcc2Z() {
         return sensors.get(1).getAccNormZ();
     }
+
+
+    // Getters for Magnetometers
+
+    public float getMagn1X() { return sensors.get(0).getMagNormX(); }
+
+    public float getMagn1Y() { return sensors.get(0).getMagNormY(); }
+
+    public float getMagn1Z() { return sensors.get(0).getMagNormZ(); }
+
+    public float getMagn2X() { return sensors.get(1).getMagNormX(); }
+
+    public float getMagn2Y() { return sensors.get(1).getMagNormY(); }
+
+    public float getMagn2Z() { return sensors.get(1).getMagNormZ(); }
 
     /**
      * return UTC start time of last session in [ms]

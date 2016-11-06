@@ -11,8 +11,10 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -29,6 +31,7 @@ import java.util.concurrent.TimeUnit;
 
 import database.Data;
 import database.DatabaseHandler;
+import database.Event;
 import lv.edi.BluetoothLib.BluetoothService;
 import lv.edi.SmartWearProcessing.Sensor;
 
@@ -91,6 +94,16 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
 
         bluetoothStatus = (TextView) findViewById(R.id.btStatusTextView);
         childName = (EditText) findViewById(R.id.nameEditText);
+
+        // Populate the spinner with Activity list
+        Spinner spinner = (Spinner) findViewById(R.id.actions_spinner);
+       // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.actions_array, android.R.layout.simple_spinner_item);
+       // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+       // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
 
 
         // Thread is used to update UI elements every second
@@ -364,5 +377,9 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
     public void onClickSaveNameAndActionButton() {
         String childNameString = childName.getText().toString();
 
+//        db.addEvent(new Event(
+//                System.currentTimeMillis(),
+//
+//                ));
     }
 }

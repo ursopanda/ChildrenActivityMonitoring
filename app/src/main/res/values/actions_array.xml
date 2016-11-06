@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="actions_array">
+        <item>1. Skriešana uz laiku</item>
+        <item>2. Ķermeņa augšdaļas atcelšana</item>
+        <item>3. Florbols sitiens vārtos</item>
+        <item>4. Basketbola metieni</item>
+        <item>5. Nomēri mani</item>
+        <item>6. Basketbola dribls</item>
+        <item>7. Lēkšana sānis</item>
+        <item>8. Leciens no vietas</item>
+        <item>9. Soļošana pa ciņiem</item>
+        <item>10. Palēcieni uz vienas kājas</item>
+        <item>11. Futbola bumbas speršana</item>
+        <item>12. Boccia</item>
+        <item>13. Šķēršļu josla</item>
+        <item>14. Rokas spēka pārbaude</item>
+        <item>15. Iešana pa virvi</item>
+        <item>16. Galops uz priekšu</item>
+        <item>17. Bumbiņas mešana</item>
+        <item>18. Rollerbrauciens pa mīnu  lauku</item>
+        <item>19. Švammīšu nešana</item>
+        <item>20. Pildbumbas grūšana</item>
+        <item>21. Lidojuma lecieni</item>
+        <item>22. Boulings</item>
+        <item>23. Bumbu ķeršana</item>
+        <item>24. Skrejriteņu slaloms</item>
+        <item>25. Aizsniedz sienu</item>
+        <item>26. Sēdus stiepšanās (FT)</item>
+        <item>27. Ratiņkrēslā slaloms</item>
+        <item>29. Barjerskriešana</item>
+        <item>30. Balona nešana</item>
+    </string-array>
+</resources>

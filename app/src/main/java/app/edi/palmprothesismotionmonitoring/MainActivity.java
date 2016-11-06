@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 import android.os.Handler;
@@ -291,14 +290,9 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
                 startProcessingButton.setChecked(false);
                 Toast.makeText(getApplicationContext(), "Processing finished!", Toast.LENGTH_SHORT).show();
                 //TODO Here we push data to DB tables!
-//                movementAmount.getText();
-//                totalMovementAmount = Integer.parseInt((String) movementAmount.getText());
-//                totalRehabLength = (String) sessionTime.getText();
             }
         });
 
-//        Intent intent = new Intent(this, DisplayStatistics.class);
-//        startActivity(intent);
     }
 
 

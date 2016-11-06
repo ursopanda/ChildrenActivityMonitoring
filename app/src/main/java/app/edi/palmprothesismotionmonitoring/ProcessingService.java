@@ -123,12 +123,6 @@ public class ProcessingService {
                 float[] acc = sensors.get(1).getAccNorm();
                 float[] magn0 = sensors.get(0).getMagNorm();
                 float[] magn = sensors.get(1).getMagNorm();
-//                mainActivity.db.getDatabaseName();
-//                mainActivity.db.addReading(new Reading(
-//                        System.currentTimeMillis(),
-//                        sensors.get(0).getAccNormX(), sensors.get(0).getAccNormY(), sensors.get(0).getAccNormZ(),
-//                        sensors.get(1).getAccNormX(), sensors.get(1).getAccNormY(), sensors.get(1).getAccNormZ(),
-//                        MainActivity.actionType));
 
                 Log.d("PROCESSING_SERVICE", " " + acc0[0] + " " + acc0[1] + " " + acc[2]);
                 Log.d("PROCESSING_SERVICE ", "acc difference "+(acc0[0]-acc[0])+" "+(acc0[1]-acc[1])+" "+(acc0[2]-acc[2]));
@@ -163,9 +157,6 @@ public class ProcessingService {
                 for(ProcessingServiceEventListener i : listeners){
                     i.onProcessingResult(currentAngle);
                 }
-//                if(sessionLength>=sessionSetLength){
-//                    stopProcessing();
-//                }
             }
                 } ,0 , period);
 

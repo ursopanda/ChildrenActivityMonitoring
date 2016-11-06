@@ -11,6 +11,9 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 import android.os.Handler;
@@ -18,6 +21,8 @@ import android.os.Handler;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
+
+import org.w3c.dom.Text;
 
 import java.util.Vector;
 import java.util.concurrent.TimeUnit;
@@ -39,11 +44,12 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
     public static long prescribedLength = 10000L;
     public static int prescribedAmount = 10;
 
-    // Store data after session
-    public static int totalMovementAmount = 0;
-    public static String totalRehabLength;
-
     private Vector<Sensor> sensors;
+
+    // elements of UI
+    private Button connectBTButton;
+    private TextView bluetoothStatus;
+    private EditText childName;
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -82,6 +88,34 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+
+        bluetoothStatus = (TextView) findViewById(R.id.btStatusTextView);
+        childName = (EditText) findViewById(R.id.nameEditText);
+
+
+        // Thread is used to update UI elements every second
+        Thread t = new Thread() {
+
+            @Override
+            public void run() {
+                try {
+                    while (!isInterrupted()) {
+                        Thread.sleep(500);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                // Check for bluetoothStatus
+                                if (application.btService.isConnected())
+                                    bluetoothStatus.setText("Connected");
+                                else
+                                    bluetoothStatus.setText("Not connected");
+                            }
+                        });
+                    }
+                } catch (InterruptedException e) {}
+            }
+        };
+        t.start();
     }
 
     @Override
@@ -245,12 +279,6 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
         @Override
         public void run() {
             timeInMilliSeconds = SystemClock.uptimeMillis() - sessionTimer;
-//            Log.e("MAIN_ACTIVITY", "sessionTIme " + sessionTime);
-//            sessionTime.setText("" + ((int) (timeInMilliSeconds / 1000)) / 60 + ":" +
-//                    String.format("%02d", (int) (timeInMilliSeconds / 1000)) + ":"
-//                    + String.format("%03d", (int) (timeInMilliSeconds % 1000)));
-//
-//            sessionTime.setTextColor(Color.RED);
             handler.postDelayed(this, 0);
         }
     };
@@ -261,13 +289,8 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
         runOnUiThread(new Runnable() {
             public void run() {
                 int progress = (int) (100 * anglef / 90);
-//                flexionValue.setProgress(progress);
                 long sessionTimeL = application.processingService.getSessionLength();
                 String time = String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes(sessionTimeL) % 60, TimeUnit.MILLISECONDS.toSeconds(sessionTimeL) % 60);
-//                sessionTime.setText(time);
-
-//                angleView.setCurrentAngle(anglef / 90);
-//                angleView.invalidate();
             }
         });
     }
@@ -294,7 +317,6 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
         });
 
     }
-
 
     @Override
     public void onStart() {
@@ -334,5 +356,13 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
         );
         AppIndex.AppIndexApi.end(client, viewAction);
         client.disconnect();
+    }
+
+    // Button onClick methods' implementation
+    public void onClickConnectBluetooth() {}
+
+    public void onClickSaveNameAndActionButton() {
+        String childNameString = childName.getText().toString();
+
     }
 }

@@ -31,9 +31,6 @@
         <activity
             android:name=".CalibrationActivity"
             android:label="@string/calibration" />
-        <activity
-            android:name=".ParametersActivity"
-            android:label="Parameters" />
         <activity android:name=".DisplayStatistics" />
         <!--
              ATTENTION: This was auto-generated to add Google Play services to your project for

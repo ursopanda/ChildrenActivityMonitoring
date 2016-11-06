@@ -1,7 +1,6 @@
 package app.edi.palmprothesismotionmonitoring;
 
 import android.bluetooth.BluetoothAdapter;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,7 +25,6 @@ import java.util.concurrent.TimeUnit;
 
 import database.Data;
 import database.DatabaseHandler;
-import database.Reading;
 import lv.edi.BluetoothLib.BluetoothService;
 import lv.edi.SmartWearProcessing.Sensor;
 
@@ -46,14 +44,6 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
     public static int totalMovementAmount = 0;
     public static String totalRehabLength;
 
-    private EditText actionTypeEditText;
-    private EditText childNameEditText;
-
-    // here we will store actionType
-    public static String actionType;
-    // here we will store child's name
-    public static String childName;
-
     private Vector<Sensor> sensors;
 
     /**
@@ -63,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
     private GoogleApiClient client;
 
     // DB instance initialization
-  DatabaseHandler db = new DatabaseHandler(this);
+    DatabaseHandler db = new DatabaseHandler(this);
 
 
     @Override
@@ -163,11 +153,6 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
             startActivity(intent);
         }
 
-        if (id == R.id.action_parameters) {
-            Intent intent = new Intent(this, ParametersActivity.class);
-            startActivity(intent);
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -254,37 +239,7 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
         }
     }
 
-    public void onClickShowTheGraph(View v) {
-        if (!startProcessingButton.isChecked()) {
-            Intent intent = new Intent(this, GraphActivity.class);
-            startActivity(intent);
-        } else
-            Toast.makeText(this, getString(R.string.must_stop_processing), Toast.LENGTH_SHORT).show();
-        }
 
-    public void onClickSetActionType(View v) {
-        actionTypeEditText = (EditText) findViewById(R.id.actionTypeEditText);
-        actionType = actionTypeEditText.getText().toString();
-
-        // Showing Toast notification in order to notify about activity type change
-        Context context = getApplicationContext();
-        CharSequence text = "Activity Set: " + actionType;
-        int duration = Toast.LENGTH_SHORT;
-        Toast toast = Toast.makeText(context, text, duration);
-        toast.show();
-    }
-
-    public void onClickSetChildName(View v) {
-        childNameEditText = (EditText) findViewById(R.id.chidNameEditText);
-        childName = childNameEditText.getText().toString();
-
-        // Showing Toast notification in order to notify about child's name change
-        Context context = getApplicationContext();
-        CharSequence text = "Child's name set: " + childName;
-        int duration = Toast.LENGTH_SHORT;
-        Toast toast = Toast.makeText(context, text, duration);
-        toast.show();
-    }
 
     // Updatinng timer value
     public Runnable updateTimer = new Runnable() {
@@ -346,50 +301,6 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
 //        startActivity(intent);
     }
 
-    public void setPrescribedFlexionValue(View v) {
-        EditText prescribedFlexionValueTextView = (EditText) findViewById(R.id.prescribedFlexionValue);
-        String prescribedFlexionValueText = prescribedFlexionValueTextView.getText().toString();
-        if (isInteger(prescribedFlexionValueText))
-            prescribedFlexion = Integer.parseInt(prescribedFlexionValueText);
-    }
-
-    public void setPrescribedRehabLengthValue(View v) {
-        EditText prescribedRehabLengthValueTextView = (EditText) findViewById(R.id.prescribedRehabLengthValue);
-        String prescribedRehabLengthValueText = prescribedRehabLengthValueTextView.getText().toString();
-        if (isLong(prescribedRehabLengthValueText)) {
-            prescribedLength = Long.parseLong(prescribedRehabLengthValueText) * 60000;
-        }
-    }
-
-    public void setPrescribedMovementAmountValue(View v) {
-        EditText prescribedMovementAmountValueTextView = (EditText) findViewById(R.id.prescribedMovementAmountValue);
-        String setPrescribedMovementAmountValueText = prescribedMovementAmountValueTextView.getText().toString();
-        if (isInteger(setPrescribedMovementAmountValueText))
-            prescribedAmount = Integer.parseInt(setPrescribedMovementAmountValueText);
-    }
-
-    public static boolean isInteger(String s) {
-        try {
-            Integer.parseInt(s);
-        } catch (NumberFormatException e) {
-            return false;
-        } catch (NullPointerException e) {
-            return false;
-        }
-        // only got here if we didn't return false
-        return true;
-    }
-
-    public static boolean isLong(String s) {
-        try {
-            Long.parseLong(s);
-        } catch (NumberFormatException e) {
-            return false;
-        } catch (NullPointerException e) {
-            return false;
-        }
-        return true;
-    }
 
     @Override
     public void onStart() {

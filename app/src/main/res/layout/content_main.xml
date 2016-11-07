@@ -86,7 +86,7 @@
                 android:id="@+id/button_start"
                 android:text="Start"
                 android:layout_weight="1"
-                android:onClick="onClickStartMonitoring"
+                android:onClick="onClickStartProcessing"
                 android:checked="false" />
             <Button
                 android:layout_width="0dp"

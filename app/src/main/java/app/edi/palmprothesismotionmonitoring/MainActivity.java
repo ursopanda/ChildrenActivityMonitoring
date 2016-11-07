@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
     Handler handler = new Handler();
 
     public static int prescribedFlexion = 70;
-    public static long prescribedLength = 10000L;
+    public static long prescribedLength = 12999000L;
     public static int prescribedAmount = 10;
 
     private Vector<Sensor> sensors;

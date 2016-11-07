@@ -1,8 +1,11 @@
 package app.edi.palmprothesismotionmonitoring;
 
 import android.bluetooth.BluetoothAdapter;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
@@ -31,6 +34,7 @@ import java.util.concurrent.TimeUnit;
 
 import database.Data;
 import database.DatabaseHandler;
+import database.Device;
 import database.Event;
 import lv.edi.BluetoothLib.BluetoothService;
 import lv.edi.SmartWearProcessing.Sensor;
@@ -110,7 +114,6 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
        // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
-
 
         // Thread is used to update UI elements every second
         Thread t = new Thread() {
@@ -378,7 +381,19 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
     }
 
     // Button onClick methods' implementation
-    public void onClickConnectBluetooth() {}
+    public void onClickConnectBluetooth() {
+
+        application.btService.connectDevice(application.btDevice);
+
+        // Save data about the devices (sensor and phone MAC adresses) to the DB
+        if (application.btService.isConnected()) {
+            WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+            WifiInfo wInfo = wifiManager.getConnectionInfo();
+            String macAddress = wInfo.getMacAddress();
+
+            db.addDevice(new Device(macAddress, application.btDevice.getAddress()));
+        }
+    }
 
     public void onClickSaveNameAndActionButton() {
         String childNameString = childName.getText().toString();
@@ -390,4 +405,9 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
     }
 
     public void onClickClearName() {childName.setText("");}
+
+    public void onClickStopMonitoring() {
+        onStopProcessing();
+        application.processingService.stopProcessing();
+    }
 }

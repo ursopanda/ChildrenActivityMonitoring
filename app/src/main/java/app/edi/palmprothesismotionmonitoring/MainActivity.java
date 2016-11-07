@@ -57,6 +57,11 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
     private Button connectBTButton;
     private TextView bluetoothStatus;
     private EditText childName;
+    private TextView dataStatusTextView = (TextView) findViewById(R.id.dataStatusTextView);
+    private TextView currentNameTextView = (TextView) findViewById(R.id.currentNameTextView);
+    private TextView currentActivityTextView = (TextView) findViewById(R.id.currentActivityTextView);
+    private TextView processingStatusTextView = (TextView) findViewById(R.id.processingStatusTextView);
+
 
     private String btStatus;
     private String batteryStatus;
@@ -257,7 +262,7 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
                 application.processingService.registerProcessingServiceEventListener(this);
                 application.processingService.startProcessing(20);
 
-
+                processingStatusTextView.setText("STARTED");
                 // Thread is used to update TextView objects every second
                 Thread t = new Thread() {
 
@@ -275,6 +280,8 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
                                                 application.processingService.getMagn1X(), application.processingService.getMagn1Y(), application.processingService.getMagn1Z(),
                                                 application.processingService.getMagn2X(), application.processingService.getMagn2Y(), application.processingService.getMagn2Z(),
                                                 "DEVICE ID"));
+
+                                        dataStatusTextView.setText("OK");
                                     }
                                 });
                             }
@@ -402,6 +409,9 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
         db.addEvent(new Event(
                 System.currentTimeMillis(), selectedAction, childNameString, btStatus, batteryStatus, isProcessingRunning, isDataOK
         ));
+
+        currentNameTextView.setText(childNameString);
+        currentActivityTextView.setText(selectedAction);
     }
 
     public void onClickClearName() {childName.setText("");}
@@ -409,5 +419,7 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
     public void onClickStopMonitoring() {
         onStopProcessing();
         application.processingService.stopProcessing();
+
+        processingStatusTextView.setText("STOPPED");
     }
 }

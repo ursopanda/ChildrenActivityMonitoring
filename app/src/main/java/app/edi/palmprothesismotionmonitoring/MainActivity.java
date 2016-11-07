@@ -54,6 +54,11 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
     private TextView bluetoothStatus;
     private EditText childName;
 
+    private String btStatus;
+    private String batteryStatus;
+    private boolean isProcessingRunning;
+    private boolean isDataOK;
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -62,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
 
     // DB instance initialization
     DatabaseHandler db = new DatabaseHandler(this);
+    Spinner mySpinner=(Spinner) findViewById(R.id.actions_spinner);
 
 
     @Override
@@ -256,7 +262,7 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
                     public void run() {
                         try {
                             while (!isInterrupted()) {
-                                Thread.sleep(500);
+                                Thread.sleep(20);
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -376,10 +382,12 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
 
     public void onClickSaveNameAndActionButton() {
         String childNameString = childName.getText().toString();
+        String selectedAction = mySpinner.getSelectedItem().toString();
 
-//        db.addEvent(new Event(
-//                System.currentTimeMillis(),
-//
-//                ));
+        db.addEvent(new Event(
+                System.currentTimeMillis(), selectedAction, childNameString, btStatus, batteryStatus, isProcessingRunning, isDataOK
+        ));
     }
+
+    public void onClickClearName() {childName.setText("");}
 }

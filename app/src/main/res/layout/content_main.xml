@@ -54,7 +54,8 @@
             <Spinner
                 android:id="@+id/actions_spinner"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:spinnerMode="dropdown" />
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -63,7 +64,7 @@
             <Button
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Set Action"
+                android:text="Set"
                 android:id="@+id/saveNameAndAction"
                 android:onClick="onClickSaveNameAndActionButton"
                 android:layout_weight="1"/>
@@ -72,12 +73,13 @@
                 android:layout_height="wrap_content"
                 android:text="Clear"
                 android:id="@+id/clearNameAndActionButton"
+                android:onClick="onClickClearName"
                 android:layout_weight="1"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:weightSum="3">
+            android:weightSum="2">
             <ToggleButton
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -93,13 +95,6 @@
                 android:text="Stop"
                 android:layout_weight="1"
                 android:onClick="onClickStopMonitoring"/>
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:id="@+id/clearMonitoringButton"
-                android:text="Clear"
-                android:layout_weight="1"
-                android:onClick="onClickClearMonitoring"/>
         </LinearLayout>
         <View
             android:layout_width="match_parent"

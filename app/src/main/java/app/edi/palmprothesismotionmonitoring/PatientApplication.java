@@ -11,6 +11,7 @@ import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Vector;
 
 import lv.edi.BluetoothLib.BluetoothEventListener;
@@ -40,6 +41,8 @@ public class PatientApplication extends Application implements SharedPreferences
     protected File calibrationFile;
     private String appDirName="PalmProsthesis";
     private String calibrationDataFileName="calibration_data.csv";
+    private String dataFileName = "data_file.csv";
+    protected File dataFile;
 
 
     @Override
@@ -58,6 +61,7 @@ public class PatientApplication extends Application implements SharedPreferences
             Log.d("APPLICATION", "list of files in folder: "+i);
         }
         calibrationFile = new File(appDirectory, calibrationDataFileName);
+        dataFile = new File(appDirectory, dataFileName);
         Log.d("APPLICATION", "calibration file "+calibrationFile);
 
         Log.d("APPLICATION", "external storage directory "+appDirectory);
@@ -135,4 +139,10 @@ public class PatientApplication extends Application implements SharedPreferences
         }
     }
 
+    public static void writeDataToFile(String data, File dataFile) throws IOException{
+        PrintWriter pw = new PrintWriter(dataFile);
+        pw.write(data + "\n");
+        pw.flush();
+        pw.close();
+    }
 }

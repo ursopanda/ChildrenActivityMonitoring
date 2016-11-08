@@ -5,7 +5,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Environment;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,9 +65,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+
+
     // creating tables
     @Override
     public void onCreate(SQLiteDatabase db) {
+
         String CREATE_DATA_TABLE = "CREATE TABLE " + TABLE_DATA + "("
                 + DATA_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + DATA_TIMESTAMP + " TIMESTAMP,"
@@ -109,7 +118,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(DATA_ID, data.get_id());
+//        values.put(DATA_ID, data.get_id());
         values.put(DATA_TIMESTAMP, data.get_timestamp());
 
         values.put(ACC1X, data.get_acc1x());
@@ -127,6 +136,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(MAGN2Z, data.get_magn2z());
 
         values.put(DEVICE_ID, data.get_smart_device_ID());
+
+        db.insert(TABLE_DATA, null, values);
+        db.close();
     }
 
     public List<Data> getAllData() {
@@ -158,6 +170,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 data.set_magn2x((Float.parseFloat(cursor.getString(11))));
                 data.set_magn2z((Float.parseFloat(cursor.getString(12))));
                 data.set_smart_device_ID(cursor.getString(13));
+
+                dataList.add(data);
+
             } while (cursor.moveToNext());
         }
         return dataList;
@@ -168,7 +183,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(EVENT_ID, event.get_id());
+//        values.put(EVENT_ID, event.get_id());
         values.put(EVENT_TIMESTAMP, event.get_timestamp());
         values.put(ACTION, event.get_action());
         values.put(CHILD_ID, event.get_child_ID());
@@ -176,6 +191,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(BATTERY_STATUS, event.get_battery_status());
         values.put(IS_PROCESSING_RUNNING, event.get_isProcessingRunning());
         values.put(IS_DATA_OK, event._isDataOK);
+
+        db.insert(TABLE_EVENT, null, values);
+        db.close();
     }
 
     public List<Event> getAllEvents() {
@@ -199,6 +217,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 event.set_battery_status(cursor.getString(5));
                 event.set_isProcessingRunning(Boolean.parseBoolean(cursor.getString(6)));
                 event.set_isDataOK(Boolean.parseBoolean(cursor.getString(7)));
+
+                eventList.add(event);
+
             } while (cursor.moveToNext());
         }
         return eventList;
@@ -209,9 +230,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(DEVICE_ID, device.get_id());
+//        values.put(DEVICE_ID, device.get_id());
         values.put(MAC_ADDR_DEVICE, device.get_MAC_ADDR_DEVICE());
         values.put(MAC_ADDR_PHONE, device.get_MAC_ADDR_PHONE());
+
+        db.insert(TABLE_DEVICE, null, values);
+        db.close();
     }
 
     public List<Device> getAllDevices() {
@@ -231,9 +255,33 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 device.set_id(Integer.parseInt(cursor.getString(0)));
                 device.set_MAC_ADDR_DEVICE(cursor.getString(1));
                 device.set_MAC_ADDR_PHONE(cursor.getString(2));
+
+                deviceList.add(device);
+
             } while (cursor.moveToNext());
         }
         return deviceList;
+    }
+
+    public static void backupDatabase() throws IOException {
+        //Open your local db as the input stream
+        String inFileName = "/data/user/0/app.edi.palmprosthesismonitoring/databases/ActivityMonitoringDB";
+        File dbFile = new File(inFileName);
+        FileInputStream fis = new FileInputStream(dbFile);
+
+        String outFileName = Environment.getExternalStorageDirectory()+"/ActivityMonitoringDB";
+        //Open the empty db as the output stream
+        OutputStream output = new FileOutputStream(outFileName);
+        //transfer bytes from the inputfile to the outputfile
+        byte[] buffer = new byte[1024];
+        int length;
+        while ((length = fis.read(buffer))>0){
+            output.write(buffer, 0, length);
+        }
+        //Close the streams
+        output.flush();
+        output.close();
+        fis.close();
     }
 
 }

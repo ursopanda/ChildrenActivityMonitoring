@@ -33,6 +33,10 @@ import org.w3c.dom.Text;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.nio.channels.FileChannel;
 import java.util.Vector;
 import java.util.concurrent.TimeUnit;
@@ -74,6 +78,10 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
     private boolean isProcessingRunning;
     private boolean isDataOK;
 
+    private String tmpString;
+
+
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -87,8 +95,10 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         currentNameTextView = (TextView) findViewById(R.id.currentNameTextView);
         currentActivityTextView = (TextView) findViewById(R.id.currentActivityTextView);
@@ -282,7 +292,7 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
                     public void run() {
                         try {
                             while (!isInterrupted()) {
-                                Thread.sleep(20);
+                                Thread.sleep(100);
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -294,6 +304,19 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
                                                 "DEVICE ID"));
 
                                         dataStatusTextView.setText("OK");
+
+                                        tmpString = application.processingService.getAcc1X() + " " + application.processingService.getAcc1Y()
+                                        + " " + application.processingService.getAcc1Z() + " " + application.processingService.getAcc2X() + " "
+                                        + application.processingService.getAcc2Y() + " " + application.processingService.getAcc2Z() + " " + application.processingService.getMagn1X() + " " + application.processingService.getMagn1Y()
+                                        + " " + application.processingService.getMagn1Z()
+                                        + " " + application.processingService.getMagn2X()
+                                        + " " + application.processingService.getMagn2Y()
+                                        + " " + application.processingService.getMagn2Z();
+
+                                        try {
+                                            application.writeDataToFile(tmpString, application.dataFile);
+                                        }
+                                        catch (IOException e) {}
                                     }
                                 });
                             }
@@ -312,8 +335,6 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
             //handler.postDelayed(updateTimer, 0); CURRENTLY produces EXCEPTION. RUNNABLE DOESN'T get valu of sessionTime view
         }
     }
-
-
 
     // Updatinng timer value
     public Runnable updateTimer = new Runnable() {
@@ -354,8 +375,6 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
                 startProcessingButton.setChecked(false);
                 Toast.makeText(getApplicationContext(), "Processing finished!", Toast.LENGTH_SHORT).show();
                 //TODO Here we push data to DB tables!
-
-                exportDB();
             }
         });
 
@@ -416,6 +435,11 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
                 String macAddress = wInfo.getMacAddress();
 
                 db.addDevice(new Device(macAddress, application.btDevice.getAddress()));
+
+                try {
+                    application.writeDataToFile(macAddress + " " + application.btDevice.getAddress(), application.dataFile);
+                }
+                catch (IOException e) {}
             }
         }
     }
@@ -430,6 +454,12 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
 
         currentNameTextView.setText(childNameString);
         currentActivityTextView.setText(selectedAction);
+
+        try {
+            application.writeDataToFile(childNameString + " " + selectedAction, application.dataFile);
+        }
+        catch (IOException e) {}
+
     }
 
     public void onClickClearName(View view) {
@@ -446,34 +476,5 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
         }
     }
 
-    private void exportDB() {
-        // TODO Auto-generated method stub
 
-        try {
-            File sd = Environment.getExternalStorageDirectory();
-            File data = Environment.getDataDirectory();
-
-            if (sd.canWrite()) {
-                String  currentDBPath= "//data//" + "PackageName"
-                        + "//databases//" + "DatabaseName";
-                String backupDBPath  = "/BackupFolder/DatabaseName";
-                File currentDB = new File(data, currentDBPath);
-                File backupDB = new File(sd, backupDBPath);
-
-                FileChannel src = new FileInputStream(currentDB).getChannel();
-                FileChannel dst = new FileOutputStream(backupDB).getChannel();
-                dst.transferFrom(src, 0, src.size());
-                src.close();
-                dst.close();
-                Toast.makeText(getBaseContext(), backupDB.toString(),
-                        Toast.LENGTH_LONG).show();
-
-            }
-        } catch (Exception e) {
-
-            Toast.makeText(getBaseContext(), e.toString(), Toast.LENGTH_LONG)
-                    .show();
-
-        }
-    }
 }

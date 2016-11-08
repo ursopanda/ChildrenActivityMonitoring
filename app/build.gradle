@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.0"
+    buildToolsVersion "24.0.0"
 
     defaultConfig {
         applicationId "app.edi.palmprothesismotionmonitoring"
@@ -10,12 +10,21 @@ android {
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
+
+        jackOptions {
+            enabled true
+        }
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
@@ -33,5 +42,6 @@ dependencies {
     compile 'com.android.support:design:23.2.1'
     compile 'com.android.support:support-v4:23.2.1'
     compile 'com.google.android.gms:play-services-appindexing:8.1.0'
-    compile files('/Users/Emil/StudioProjects/PalmProthesisMotionMonitoring3/libs/achartengine-1.1.0.jar')
 }
+
+

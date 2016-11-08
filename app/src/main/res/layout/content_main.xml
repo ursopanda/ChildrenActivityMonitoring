@@ -37,6 +37,7 @@
                 android:layout_weight="1"
                 android:layout_height="match_parent"
                 android:text="Connect"
+                android:id="@+id/connectBluetooth"
                 android:onClick="onClickConnectBluetooth"/>
         </LinearLayout>
         <LinearLayout
@@ -79,7 +80,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:weightSum="2">
+            android:weightSum="1">
             <ToggleButton
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -88,13 +89,6 @@
                 android:layout_weight="1"
                 android:onClick="onClickStartProcessing"
                 android:checked="false" />
-            <Button
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:id="@+id/stopMonitoringButton"
-                android:text="Stop"
-                android:layout_weight="1"
-                android:onClick="onClickStopMonitoring"/>
         </LinearLayout>
         <View
             android:layout_width="match_parent"

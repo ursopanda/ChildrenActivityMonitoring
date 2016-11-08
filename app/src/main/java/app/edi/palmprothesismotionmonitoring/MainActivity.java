@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -29,6 +30,10 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.w3c.dom.Text;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.nio.channels.FileChannel;
 import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 
@@ -57,10 +62,11 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
     private Button connectBTButton;
     private TextView bluetoothStatus;
     private EditText childName;
-    private TextView dataStatusTextView = (TextView) findViewById(R.id.dataStatusTextView);
-    private TextView currentNameTextView = (TextView) findViewById(R.id.currentNameTextView);
-    private TextView currentActivityTextView = (TextView) findViewById(R.id.currentActivityTextView);
-    private TextView processingStatusTextView = (TextView) findViewById(R.id.processingStatusTextView);
+
+    private TextView dataStatusTextView;
+    private TextView currentNameTextView;
+    private TextView currentActivityTextView;
+    private TextView processingStatusTextView;
 
 
     private String btStatus;
@@ -76,13 +82,19 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
 
     // DB instance initialization
     DatabaseHandler db = new DatabaseHandler(this);
-    Spinner mySpinner=(Spinner) findViewById(R.id.actions_spinner);
+    Spinner mySpinner;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        currentNameTextView = (TextView) findViewById(R.id.currentNameTextView);
+        currentActivityTextView = (TextView) findViewById(R.id.currentActivityTextView);
+        processingStatusTextView = (TextView) findViewById(R.id.processingStatusTextView);
+        dataStatusTextView = (TextView) findViewById(R.id.dataStatusTextView);
+        mySpinner = (Spinner) findViewById(R.id.actions_spinner);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         startProcessingButton = (ToggleButton) findViewById(R.id.button_start);
@@ -342,6 +354,8 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
                 startProcessingButton.setChecked(false);
                 Toast.makeText(getApplicationContext(), "Processing finished!", Toast.LENGTH_SHORT).show();
                 //TODO Here we push data to DB tables!
+
+                exportDB();
             }
         });
 
@@ -388,21 +402,25 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
     }
 
     // Button onClick methods' implementation
-    public void onClickConnectBluetooth() {
 
-        application.btService.connectDevice(application.btDevice);
+    public void onClickConnectBluetooth(View view) {
 
-        // Save data about the devices (sensor and phone MAC adresses) to the DB
-        if (application.btService.isConnected()) {
-            WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-            WifiInfo wInfo = wifiManager.getConnectionInfo();
-            String macAddress = wInfo.getMacAddress();
+        if (application.btDevice != null) {
 
-            db.addDevice(new Device(macAddress, application.btDevice.getAddress()));
+            application.btService.connectDevice(application.btDevice);
+
+            // Save data about the devices (sensor and phone MAC adresses) to the DB
+            if (application.btService.isConnected()) {
+                WifiManager wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+                WifiInfo wInfo = wifiManager.getConnectionInfo();
+                String macAddress = wInfo.getMacAddress();
+
+                db.addDevice(new Device(macAddress, application.btDevice.getAddress()));
+            }
         }
     }
 
-    public void onClickSaveNameAndActionButton() {
+    public void onClickSaveNameAndActionButton(View view) {
         String childNameString = childName.getText().toString();
         String selectedAction = mySpinner.getSelectedItem().toString();
 
@@ -414,12 +432,48 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
         currentActivityTextView.setText(selectedAction);
     }
 
-    public void onClickClearName() {childName.setText("");}
+    public void onClickClearName(View view) {
+        childName.setText("");
+        currentNameTextView.setText("");
+    }
 
-    public void onClickStopMonitoring() {
-        onStopProcessing();
-        application.processingService.stopProcessing();
+    public void onClickStopMonitoring(View view) {
+        if (application.processingService.isProcessing()) {
+            onStopProcessing();
+            application.processingService.stopProcessing();
 
-        processingStatusTextView.setText("STOPPED");
+            processingStatusTextView.setText("STOPPED");
+        }
+    }
+
+    private void exportDB() {
+        // TODO Auto-generated method stub
+
+        try {
+            File sd = Environment.getExternalStorageDirectory();
+            File data = Environment.getDataDirectory();
+
+            if (sd.canWrite()) {
+                String  currentDBPath= "//data//" + "PackageName"
+                        + "//databases//" + "DatabaseName";
+                String backupDBPath  = "/BackupFolder/DatabaseName";
+                File currentDB = new File(data, currentDBPath);
+                File backupDB = new File(sd, backupDBPath);
+
+                FileChannel src = new FileInputStream(currentDB).getChannel();
+                FileChannel dst = new FileOutputStream(backupDB).getChannel();
+                dst.transferFrom(src, 0, src.size());
+                src.close();
+                dst.close();
+                Toast.makeText(getBaseContext(), backupDB.toString(),
+                        Toast.LENGTH_LONG).show();
+
+            }
+        } catch (Exception e) {
+
+            Toast.makeText(getBaseContext(), e.toString(), Toast.LENGTH_LONG)
+                    .show();
+
+        }
     }
 }

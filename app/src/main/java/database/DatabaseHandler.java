@@ -15,6 +15,8 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import app.edi.palmprothesismotionmonitoring.PatientApplication;
+
 /**
  * Created by Emil on 24/10/2016.
  */
@@ -22,6 +24,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "activityMonitoringDB";
+    private PatientApplication application;
 
     // Fields for Table Data
     private static final String TABLE_DATA = "data";
@@ -118,7 +121,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-//        values.put(DATA_ID, data.get_id());
+        values.put(DATA_ID, data.get_id());
         values.put(DATA_TIMESTAMP, data.get_timestamp());
 
         values.put(ACC1X, data.get_acc1x());
@@ -172,11 +175,18 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 data.set_smart_device_ID(cursor.getString(13));
 
                 dataList.add(data);
+//                try {
+//                    String tmp = data.get_timestamp() + " " + data.get_acc1x() + " " + data.get_acc1y() + " "
+//                            + data.get_acc1z() + " " + data.get_acc2x() + " " + data.get_acc2y() + " " + data.get_acc2z();
+//                    application.writeDataToFile(tmp, application.dataFile);
+//                }
+//                catch (IOException e) {}
 
             } while (cursor.moveToNext());
         }
         return dataList;
     }
+
 
     // CRUD operations for Event Table
     public void addEvent(Event event) {
@@ -261,6 +271,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
         return deviceList;
+    }
+
+    public int getDataRowCount() {
+        String countQuery = "SELECT  * FROM " + TABLE_DATA;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery, null);
+        int cnt = cursor.getCount();
+        cursor.close();
+        return cnt;
     }
 
     public static void backupDatabase() throws IOException {

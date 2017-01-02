@@ -42,7 +42,7 @@ public class PatientApplication extends Application implements SharedPreferences
     private String appDirName="PalmProsthesis";
     private String calibrationDataFileName="calibration_data.csv";
     private String dataFileName = "data_file.csv";
-    protected File dataFile;
+    public File dataFile;
 
 
     @Override

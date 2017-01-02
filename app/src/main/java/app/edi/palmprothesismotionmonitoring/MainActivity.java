@@ -28,16 +28,10 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
-import org.w3c.dom.Text;
-
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.nio.channels.FileChannel;
 import java.util.Vector;
 import java.util.concurrent.TimeUnit;
 
@@ -92,6 +86,8 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
     DatabaseHandler db = new DatabaseHandler(this);
     Spinner mySpinner;
 
+    final static String fileName = "data.txt";
+    final static String path = Environment.getExternalStorageDirectory() + "/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -285,6 +281,7 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
                 application.processingService.startProcessing(20);
 
                 processingStatusTextView.setText("STARTED");
+
                 // Thread is used to update TextView objects every second
                 Thread t = new Thread() {
 
@@ -297,11 +294,22 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
                                     @Override
                                     public void run() {
                                         db.addData(new Data(System.currentTimeMillis(),
-                                                application.processingService.getAcc1X(), application.processingService.getAcc1Y(), application.processingService.getAcc1Z(),
-                                                application.processingService.getAcc2X(), application.processingService.getAcc2Y(), application.processingService.getAcc2Z(),
-                                                application.processingService.getMagn1X(), application.processingService.getMagn1Y(), application.processingService.getMagn1Z(),
-                                                application.processingService.getMagn2X(), application.processingService.getMagn2Y(), application.processingService.getMagn2Z(),
+                                                application.sensors.get(0).getAccRawX(), application.sensors.get(0).getAccRawY(), application.sensors.get(0).getAccRawZ(),
+                                                application.sensors.get(1).getAccRawX(), application.sensors.get(1).getAccRawY(), application.sensors.get(1).getAccRawZ(),
+                                                application.sensors.get(0).getMagNormX(), application.sensors.get(0).getMagNormY(), application.sensors.get(0).getMagNormZ(),
+                                                application.sensors.get(1).getMagNormX(), application.sensors.get(1).getMagNormY(), application.sensors.get(1).getMagNormZ(),
                                                 "DEVICE ID"));
+
+                                        db.getDataRowCount();
+
+                                        String tmp = String.valueOf(application.sensors.get(0).getAccRawX()) + " " + String.valueOf(application.sensors.get(0).getAccRawY()) + " "
+                                                + String.valueOf(application.sensors.get(0).getAccRawZ()) + " "
+                                                + String.valueOf(application.sensors.get(1).getAccRawX()) + " " + String.valueOf(application.sensors.get(1).getAccRawY()) + " "
+                                                + String.valueOf(application.sensors.get(1).getAccRawZ()) + " "
+                                                + String.valueOf(application.sensors.get(0).getMagNormX()) + " " + String.valueOf(application.sensors.get(0).getMagNormY()) + " "
+                                                + String.valueOf(application.sensors.get(0).getMagNormZ());
+
+                                        saveToFile(mySpinner.getSelectedItem().toString() + " " + tmp);
 
                                         dataStatusTextView.setText("OK");
 
@@ -375,6 +383,7 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
                 startProcessingButton.setChecked(false);
                 Toast.makeText(getApplicationContext(), "Processing finished!", Toast.LENGTH_SHORT).show();
                 //TODO Here we push data to DB tables!
+                db.getAllData();
             }
         });
 
@@ -474,6 +483,22 @@ public class MainActivity extends AppCompatActivity implements ProcessingService
 
             processingStatusTextView.setText("STOPPED");
         }
+    }
+
+    public static boolean saveToFile( String data){
+        try {
+            new File(path  ).mkdir();
+            File file = new File(path+ fileName);
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            FileOutputStream fileOutputStream = new FileOutputStream(file,true);
+            fileOutputStream.write((data + System.getProperty("line.separator")).getBytes());
+
+            return true;
+        }  catch(FileNotFoundException ex) {}
+           catch(IOException ex) {}
+        return  false;
     }
 
 

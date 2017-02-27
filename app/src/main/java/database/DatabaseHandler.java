@@ -83,6 +83,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + ACC2X + " FLOAT,"
                 + ACC2Y + " FLOAT,"
                 + ACC2Z + " FLOAT,"
+                + MAGN1X + " FLOAT,"
+                + MAGN1Y + " FLOAT,"
+                + MAGN1Z + " FLOAT,"
+                + MAGN2X + " FLOAT,"
+                + MAGN2Y + " FLOAT,"
+                + MAGN2Z + " FLOAT,"
                 + SMART_DEVICE_ID + " TEXT" + ")";
 
         String CREATE_EVENT_TABLE = "CREATE TABLE " + TABLE_EVENT + "("
@@ -171,8 +177,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 data.set_magn1y((Float.parseFloat(cursor.getString(9))));
                 data.set_magn1z((Float.parseFloat(cursor.getString(10))));
                 data.set_magn2x((Float.parseFloat(cursor.getString(11))));
-                data.set_magn2z((Float.parseFloat(cursor.getString(12))));
-                data.set_smart_device_ID(cursor.getString(13));
+                data.set_magn2y((Float.parseFloat(cursor.getString(12))));
+                data.set_magn2z((Float.parseFloat(cursor.getString(13))));
+                data.set_smart_device_ID(cursor.getString(14));
 
                 dataList.add(data);
 //                try {
